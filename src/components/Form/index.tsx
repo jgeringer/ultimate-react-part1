@@ -1,32 +1,17 @@
-import React, { FormEvent, useRef, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
+interface FormData {
+  name: string;
+  age: number;
+}
+
 const Form = () => {
-  //   const nameRef = useRef<HTMLInputElement>(null);
-  //   const ageRef = useRef<HTMLInputElement>(null);
-  //   const person = {
-  //     name: "",
-  //     age: 0,
-  //   };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  //   const handleSubmit = (event: FormEvent) => {
-  //     event.preventDefault();
-  //     if (nameRef.current !== null) person.name = nameRef.current.value;
-  //     if (ageRef.current !== null) person.age = parseInt(ageRef.current.value);
-  //     console.log(person);
-  //   };
-
-  //   const [person, setPerson] = useState({
-  //     name: "",
-  //     age: "",
-  //   });
-
-  //   const handleSubmit = (event: FormEvent) => {
-  //     event.preventDefault();
-  //     console.log(person);
-  //   };
-
-  const { register, handleSubmit } = useForm();
   const onSubmit = (data: FieldValues) => console.log(data);
 
   return (
@@ -36,17 +21,17 @@ const Form = () => {
           Name
         </label>
         <input
-          // instead of onChange and value, we'll use register instead...
-          {...register("name")}
-          //   onChange={(event) =>
-          //     setPerson({ ...person, name: event.target.value })
-          //   }
-          // ref={nameRef}
-          // value={person.name}
+          {...register("name", { required: true, minLength: 3 })}
+          className="form-control"
           id="name"
           type="text"
-          className="form-control"
         />
+        {errors.name?.type === "required" && (
+          <p className="text-danger">The name field is required.</p>
+        )}
+        {errors.age?.type === "minLength" && (
+          <p className="text-danger">The name must be at least 3 characters.</p>
+        )}
       </div>
       <div className="mb-3">
         <label htmlFor="age" className="form-label">
